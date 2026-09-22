@@ -70,6 +70,8 @@ Abra `http://localhost:8793/` no navegador, faça login e explore. O administrad
 A suíte automatizada roda dentro do container PHP 8.4, sem depender de nada instalado na máquina:
 
 ```bash
+# instala as dependências, incluindo as de desenvolvimento usadas nos checks
+docker run --rm -u "$(id -u):$(id -g)" -e COMPOSER_HOME=/tmp/composer -v "$PWD":/app -w /app composer:2 install
 # testes (unidade e integração), análise estática e estilo
 docker run --rm -u "$(id -u):$(id -g)" -v "$PWD":/app -w /app php:8.4-cli php vendor/bin/phpunit
 docker run --rm -u "$(id -u):$(id -g)" -v "$PWD":/app -w /app php:8.4-cli php vendor/bin/phpstan analyse
