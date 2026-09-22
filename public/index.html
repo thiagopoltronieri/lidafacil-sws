@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lida Fácil</title>
+    <meta name="description" content="Console seguro de gestão de usuários e rebanho com autenticação JWT e controle de acesso por perfil.">
+    <link rel="icon" href="/assets/img/logo.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/assets/css/fonts.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <script src="/assets/js/spa.js" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <!-- tela de login -->
+    <section id="view-login" class="login-wrap">
+        <div class="login-card glass">
+            <div class="login-hero">
+                <span class="brand"><img src="/assets/img/logo.svg" alt=""> Lida Fácil</span>
+                <p>Console de acesso seguro: gestão de usuários e rebanho com autenticação por token JWT e controle de acesso por perfil.</p>
+                <img class="login-banner" src="/assets/img/hero-farm.svg" alt="Ilustração de uma fazenda com colinas verdes, sol e animais do rebanho">
+            </div>
+            <form id="login-form" class="login-form" novalidate>
+                <h1>Entrar</h1>
+                <div class="field">
+                    <label for="login-email">E-mail</label>
+                    <input id="login-email" name="email" type="email" autocomplete="username" required>
+                </div>
+                <div class="field">
+                    <label for="login-password">Senha</label>
+                    <input id="login-password" name="password" type="password" autocomplete="current-password" required>
+                </div>
+                <p id="login-error" class="error-text" role="alert" hidden></p>
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit">Entrar</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- aplicação autenticada -->
+    <div id="view-app" hidden>
+        <header class="topbar">
+            <span class="brand"><img src="/assets/img/logo.svg" alt=""> Lida Fácil</span>
+            <nav class="nav" aria-label="Seções">
+                <button class="tab-btn" data-tab="users" type="button">Usuários</button>
+                <button class="tab-btn" data-tab="animals" type="button" id="tab-animals-btn">Rebanho</button>
+                <span class="user"><span id="current-name"></span> <span class="badge" id="current-role"></span></span>
+                <button class="btn btn-ghost btn-sm" id="logout-btn" type="button">Sair</button>
+            </nav>
+        </header>
+
+        <main class="container" id="conteudo">
+            <section id="tab-panel-users" class="tab-panel">
+                <div class="page-head">
+                    <h1 id="users-title" tabindex="-1">Usuários</h1>
+                    <div class="spacer"></div>
+                    <button class="btn btn-primary" id="new-user-btn" type="button" hidden>Novo usuário</button>
+                </div>
+                <div id="users-list" class="stack" aria-live="polite"></div>
+            </section>
+
+            <section id="tab-panel-animals" class="tab-panel" hidden>
+                <div class="page-head">
+                    <h1 id="animals-title" tabindex="-1">Rebanho</h1>
+                    <div class="spacer"></div>
+                    <button class="btn btn-primary" id="new-animal-btn" type="button">Novo animal</button>
+                </div>
+                <div id="animals-list" class="stack" aria-live="polite"></div>
+            </section>
+
+            <section class="card glass response-card">
+                <h2>Última resposta da API</h2>
+                <p class="muted" id="response-meta">Nenhuma chamada ainda.</p>
+                <pre class="response-body" id="response-body" tabindex="0" aria-label="Corpo da última resposta da API"></pre>
+            </section>
+        </main>
+
+        <footer class="footer">Lida Fácil - &copy; 2026 Todos os direitos reservados</footer>
+    </div>
+
+    <!-- modal de formulario de criação e edição -->
+    <div id="modal" class="modal-overlay" hidden>
+        <div class="modal glass" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <h2 id="modal-title">Formulário</h2>
+            <form id="modal-form" novalidate>
+                <div id="modal-fields" class="form-grid"></div>
+                <p id="modal-error" class="error-text" role="alert" hidden></p>
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit" id="modal-submit">Salvar</button>
+                    <button class="btn btn-ghost" type="button" id="modal-cancel">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
