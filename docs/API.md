@@ -31,7 +31,7 @@ Usuários -  rotas protegidas por JWT:
 | GET     | /api/v1/users/me   | Consultar o próprio cadastro do token | admin, operator, client            | 200 OK                              |
 | GET     | /api/v1/users/{id} | Consultar um usuário                  | admin, operator, o próprio client | 200 OK, 403, 404 Not Found          |
 | PUT     | /api/v1/users/{id} | Atualizar um usuário                  | admin, operator, o próprio client | 200 OK, 403, 404, 409, 422          |
-| DELETE  | /api/v1/users/{id} | Excluir um usuário                    | admin                              | 204 No Content, 403, 404, 409       |
+| DELETE  | /api/v1/users/{id} | Excluir um usuário                    | admin                              | 204 No Content, 403, 404       |
 
 Rebanho e vacinação -rotas protegidas por JWT:
 

@@ -72,7 +72,7 @@ O `pre-commit` roda estilo, análise estática e testes antes de cada commit, us
 
 ## Testes E2E
 
-A validação de ponta a ponta usa o Playwright, cobrindo login, RBAC por perfil e o CRUD pela interface, nos tamanhos de celular, tablet e desktop. Os specs ficam em `tests/e2e/` e rodam contra a aplicação no ar:
+A validação de ponta a ponta usa o Playwright, cobrindo o login e o controle de acesso por perfil (RBAC), nos tamanhos de celular e desktop. Os specs ficam em `tests/e2e/` e rodam contra a aplicação no ar:
 
 ```bash
 docker compose up --build -d          # sobe a aplicação em http://localhost:8793
