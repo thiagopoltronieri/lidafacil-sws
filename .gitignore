@@ -1,0 +1,29 @@
+# dependências
+/vendor/
+node_modules/
+
+# runtime da aplicação banco sqlite, cache, logs
+/var/*
+!/var/.gitkeep
+
+# ambiente e segredos
+.env
+.env.local
+
+# caches de ferramentas
+.php-cs-fixer.cache
+.phpunit.cache/
+.phpunit.result.cache
+
+# artefatos de teste e2e e playwright
+test-results/
+playwright-report/
+.playwright-mcp/
+/tests/e2e/.cache/
+
+# cobertura
+/coverage/
+
+# arquivos de sistema operacional
+.DS_Store
+Thumbs.db

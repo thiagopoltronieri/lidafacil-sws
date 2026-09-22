@@ -1,0 +1,9 @@
+# reduz o contexto enviado ao build; a imagem copia só o necessário via allowlist no Dockerfile
+/vendor/
+/node_modules/
+/var/
+.git/
+.env
+.env.local
+.php-cs-fixer.cache
+.phpunit.cache/

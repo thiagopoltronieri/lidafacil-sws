@@ -1,0 +1,19 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+
+parameters:
+    # nível alto de análise estática;
+    level: 8
+    paths:
+        - src
+        - tests
+        - bin
+        - config
+        - public
+    # o container de runtime roda php 8.4
+    phpVersion: 80400
+    treatPhpDocTypesAsCertain: false
+    # não exigir anotação de generics em classes de terceiros (ex.: Slim\App)
+    ignoreErrors:
+        - identifier: missingType.generics

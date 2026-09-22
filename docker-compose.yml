@@ -1,0 +1,68 @@
+# compose de desenvolvimento do Lida Fácil: a aplicação php e o banco mysql (lidafacil-db)
+services:
+  app:
+    build: .
+    image: lidafacil:local
+    container_name: lidafacil-app
+    # publica só no loopback do host, como o banco, para não expor o app de dev na rede local
+    ports:
+      - "127.0.0.1:${APP_PORT:-8793}:8080"
+    environment:
+      APP_ENV: "${APP_ENV:-dev}"
+      APP_DEBUG: "${APP_DEBUG:-false}"
+      APP_TZ: "${APP_TZ:-America/Sao_Paulo}"
+      # aponta para o serviço do banco pela rede do compose; 3306 é a porta interna do container
+      DB_DRIVER: mysql
+      DB_HOST: lidafacil-db
+      DB_PORT: "3306"
+      DB_NAME: "${DB_NAME:-lidafacil}"
+      DB_USER: "${DB_USER:-lidafacil}"
+      # sem default: obriga a senha vir do .env, para não subir com credencial trivial e conhecida
+      DB_PASSWORD: "${DB_PASSWORD:?defina DB_PASSWORD no .env}"
+      # jwt: segredo obrigatório e sem default, para não assinar token com chave conhecida
+      JWT_SECRET: "${JWT_SECRET:?defina JWT_SECRET no .env}"
+      JWT_ISSUER: "${JWT_ISSUER:-lidafacil-sws}"
+      JWT_ACCESS_TTL: "${JWT_ACCESS_TTL:-900}"
+      JWT_REFRESH_TTL: "${JWT_REFRESH_TTL:-604800}"
+      # origens liberadas no cors; vazio quando a spa é servida na mesma origem
+      CORS_ALLOWED_ORIGINS: "${CORS_ALLOWED_ORIGINS:-}"
+      # usuários semeados no primeiro start, um por perfil; sem senha padrão embutida
+      SEED_ADMIN_NAME: "${SEED_ADMIN_NAME:-Administrador Demonstração}"
+      SEED_ADMIN_EMAIL: "${SEED_ADMIN_EMAIL:-admin@lidafacil.local}"
+      SEED_ADMIN_PASSWORD: "${SEED_ADMIN_PASSWORD:-}"
+      SEED_OPERATOR_NAME: "${SEED_OPERATOR_NAME:-Operador Demonstração}"
+      SEED_OPERATOR_EMAIL: "${SEED_OPERATOR_EMAIL:-operator@lidafacil.local}"
+      SEED_OPERATOR_PASSWORD: "${SEED_OPERATOR_PASSWORD:-}"
+      SEED_CLIENT_NAME: "${SEED_CLIENT_NAME:-Cliente Demonstração}"
+      SEED_CLIENT_EMAIL: "${SEED_CLIENT_EMAIL:-client@lidafacil.local}"
+      SEED_CLIENT_PASSWORD: "${SEED_CLIENT_PASSWORD:-}"
+    depends_on:
+      lidafacil-db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  lidafacil-db:
+    image: mysql:8.4
+    container_name: lidafacil-db
+    # publica só no loopback do host e fora do padrão (33193), para não expor o banco na rede local
+    ports:
+      - "127.0.0.1:${DB_HOST_PORT:-33193}:3306"
+    environment:
+      MYSQL_DATABASE: "${DB_NAME:-lidafacil}"
+      MYSQL_USER: "${DB_USER:-lidafacil}"
+      # sem defaults fracos: as senhas são obrigatórias e vêm do .env
+      MYSQL_PASSWORD: "${DB_PASSWORD:?defina DB_PASSWORD no .env}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:?defina DB_ROOT_PASSWORD no .env}"
+    volumes:
+      - lidafacil_db:/var/lib/mysql
+    healthcheck:
+      # o ping só verifica se o servidor responde e não exige autenticação, então não passa senha
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  lidafacil_db:

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="480" height="320" viewBox="0 0 480 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de uma fazenda com animais">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bfe9c8"/>
+      <stop offset="1" stop-color="#e9f6ec"/>
+    </linearGradient>
+    <clipPath id="frame"><rect x="0" y="0" width="480" height="320" rx="20"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect x="0" y="0" width="480" height="320" fill="url(#sky)"/>
+
+    <!-- sol -->
+    <circle cx="96" cy="78" r="34" fill="#f4c945"/>
+
+    <!-- nuvens -->
+    <g fill="#ffffff" opacity="0.92">
+      <ellipse cx="330" cy="70" rx="40" ry="20"/>
+      <ellipse cx="360" cy="60" rx="28" ry="18"/>
+      <ellipse cx="300" cy="62" rx="24" ry="16"/>
+      <ellipse cx="180" cy="110" rx="30" ry="15"/>
+      <ellipse cx="205" cy="104" rx="22" ry="13"/>
+    </g>
+
+    <!-- colinas em camadas -->
+    <path d="M0 210 C110 170 190 220 260 205 C340 188 420 214 480 196 L480 320 L0 320 Z" fill="#7cc96a"/>
+    <path d="M0 250 C90 220 200 268 300 244 C380 226 440 258 480 242 L480 320 L0 320 Z" fill="#57b04a"/>
+    <path d="M0 292 C120 270 230 300 340 286 C400 278 450 296 480 288 L480 320 L0 320 Z" fill="#3f9a35"/>
+
+    <!-- cerca -->
+    <g fill="#2f7d27">
+      <rect x="356" y="214" width="6" height="40" rx="2"/>
+      <rect x="392" y="210" width="6" height="44" rx="2"/>
+      <rect x="428" y="214" width="6" height="40" rx="2"/>
+      <rect x="352" y="222" width="86" height="5" rx="2"/>
+      <rect x="352" y="236" width="86" height="5" rx="2"/>
+    </g>
+
+    <!-- boi -->
+    <g fill="#2f7d27" transform="translate(60 214) scale(0.55)">
+      <rect x="36" y="58" width="8" height="28" rx="4"/>
+      <rect x="52" y="58" width="8" height="28" rx="4"/>
+      <rect x="82" y="58" width="8" height="28" rx="4"/>
+      <rect x="98" y="58" width="8" height="28" rx="4"/>
+      <ellipse cx="66" cy="48" rx="46" ry="23"/>
+      <circle cx="104" cy="44" r="16"/>
+      <ellipse cx="118" cy="50" rx="8" ry="6.5"/>
+      <path d="M100 28 q-5 -11 -12 -9 q5 3 7 12 z"/>
+      <path d="M112 28 q6 -10 12 -7 q-6 3 -7 11 z"/>
+    </g>
+
+    <!-- ovelha -->
+    <g fill="#2f7d27" transform="translate(210 250) scale(0.42)">
+      <rect x="44" y="64" width="6" height="22" rx="3"/>
+      <rect x="58" y="64" width="6" height="22" rx="3"/>
+      <rect x="80" y="64" width="6" height="22" rx="3"/>
+      <rect x="92" y="64" width="6" height="22" rx="3"/>
+      <ellipse cx="68" cy="50" rx="30" ry="18"/>
+      <circle cx="60" cy="40" r="17"/>
+      <circle cx="80" cy="42" r="16"/>
+      <circle cx="52" cy="56" r="14"/>
+      <ellipse cx="104" cy="52" rx="11" ry="13"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,30 @@
+#!/bin/sh
+# gate de qualidade antes de cada commit: estilo, análise estática e testes roda dentro do container php 8.4 quando houver docker; sem docker, cai para o php local
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+if [ ! -d vendor ]; then
+    echo "pre-commit: dependências ausentes; rode o composer install antes de commitar" >&2
+    exit 1
+fi
+
+run() {
+    if command -v docker >/dev/null 2>&1; then
+        docker run --rm -u "$(id -u):$(id -g)" -v "$REPO_ROOT":/app -w /app php:8.4-cli "$@"
+    else
+        "$@"
+    fi
+}
+
+echo "pre-commit: estilo de código (php-cs-fixer)"
+run php vendor/bin/php-cs-fixer fix --dry-run --diff
+
+echo "pre-commit: análise estática (phpstan)"
+run php vendor/bin/phpstan analyse --no-progress
+
+echo "pre-commit: testes automatizados (phpunit)"
+run php vendor/bin/phpunit --no-coverage
+
+echo "pre-commit: tudo verde, seguindo com o commit"
