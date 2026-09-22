@@ -1,0 +1,62 @@
+name: CI
+
+# continuous integration : estilo de código, análise estática e testes a cada push e PR
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# evita execuções duplicadas na mesma referência
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Estilo, análise estática e testes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configura PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, dom, xml, pdo_sqlite, tokenizer, ctype
+          coverage: none
+          tools: composer:v2
+
+      - name: Descobre o diretório de cache do composer
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache das dependências do composer
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-
+
+      - name: Instala dependências
+        # --no-scripts evita rodar scripts de composer no runner (defesa a mais em PR de terceiros)
+        run: composer install --no-interaction --prefer-dist --no-progress --no-scripts
+
+      - name: Auditoria de segurança das dependências (composer audit)
+        run: composer audit --no-interaction
+
+      - name: Estilo de código (php-cs-fixer)
+        run: composer cs
+
+      - name: Análise estática (phpstan)
+        run: composer stan
+
+      - name: Testes unitários (phpunit)
+        run: composer test:unit
+
+      - name: Testes de integração (phpunit)
+        run: composer test:integration

@@ -1,0 +1,48 @@
+name: Docker
+
+# valida que a imagem constrói e sobe: build local e smoke test do container a cada push e PR na main
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# evita execuções duplicadas na mesma referência
+concurrency:
+  group: docker-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-smoke:
+    name: Build e smoke test da imagem
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configura o Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build da imagem (carrega localmente para o smoke test)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: lidafacil:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Smoke test do container
+        run: |
+          docker run -d --name lidafacil-ci -p 8080:8080 -e SEED_ADMIN_PASSWORD=ci-smoke-2026 lidafacil:ci
+          ok=0
+          for _ in $(seq 1 20); do
+            if curl -fsS http://localhost:8080/health | grep -q '"status":"ok"'; then ok=1; break; fi
+            sleep 2
+          done
+          docker logs lidafacil-ci
+          docker rm -f lidafacil-ci >/dev/null 2>&1 || true
+          test "$ok" = "1"
